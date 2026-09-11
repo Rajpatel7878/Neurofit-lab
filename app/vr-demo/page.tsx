@@ -8,6 +8,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Headset, Smartphone, Monitor } from 'lucide-react';
 import { toast } from 'sonner';
 
+// Pre-computed outside component — avoids Math.random() during render (hydration mismatch)
+const WAVEFORM_BARS = Array.from({ length: 20 }, (_, i) => ({
+  height: 4 + ((i * 7 + 13) % 20),       // deterministic heights 4–23px
+  duration: 1 + ((i * 3 + 5) % 10) / 10, // deterministic durations 1.0–1.9s
+  delay: i * 0.1,                          // staggered 0s–1.9s
+}));
+
 export default function VRDemoPage() {
   const [isVRSupported, setIsVRSupported] = useState<boolean | null>(null);
   const [vrAttempted, setVrAttempted] = useState(false);
@@ -116,17 +123,24 @@ export default function VRDemoPage() {
                       style={{ animation: 'spin 12s linear infinite' }}
                     />
 
-                    {/* Pulsing node dots */}
+                    {/* Pulsing node dots — delay kept inside shorthand to avoid conflict */}
                     {[
-                      { top: '8%', left: '50%', delay: '0s' },
-                      { top: '50%', left: '8%', delay: '0.5s' },
-                      { top: '50%', right: '8%', delay: '1s' },
-                      { bottom: '8%', left: '50%', delay: '1.5s' },
-                    ].map((pos, i) => (
+                      { top: '8%', left: '50%', animationDelay: '0s' },
+                      { top: '50%', left: '8%', animationDelay: '0.5s' },
+                      { top: '50%', right: '8%', animationDelay: '1s' },
+                      { bottom: '8%', left: '50%', animationDelay: '1.5s' },
+                    ].map(({ animationDelay, ...pos }, i) => (
                       <div
                         key={i}
                         className="absolute h-3 w-3 rounded-full bg-primary/60"
-                        style={{ ...pos, animation: `ping 2s ease-in-out ${pos.delay} infinite` }}
+                        style={{
+                          ...pos,
+                          animationName: 'ping',
+                          animationDuration: '2s',
+                          animationTimingFunction: 'ease-in-out',
+                          animationIterationCount: 'infinite',
+                          animationDelay,
+                        }}
                       />
                     ))}
 
@@ -148,14 +162,17 @@ export default function VRDemoPage() {
                         NEURAL ACTIVITY
                       </p>
                       <div className="flex gap-1">
-                        {Array.from({ length: 20 }).map((_, i) => (
+                        {WAVEFORM_BARS.map((bar, i) => (
                           <div
                             key={i}
                             className="flex-1 rounded-sm bg-primary/60"
                             style={{
-                              height: `${Math.random() * 20 + 4}px`,
-                              animation: `pulse ${1 + Math.random()}s ease-in-out infinite`,
-                              animationDelay: `${i * 0.1}s`,
+                              height: `${bar.height}px`,
+                              animationName: 'pulse',
+                              animationDuration: `${bar.duration}s`,
+                              animationTimingFunction: 'ease-in-out',
+                              animationIterationCount: 'infinite',
+                              animationDelay: `${bar.delay}s`,
                             }}
                           />
                         ))}

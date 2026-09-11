@@ -99,10 +99,36 @@ export default function HomePage() {
                 <div className="relative w-full h-full max-h-96 rounded-3xl bg-gradient-to-br from-primary/10 to-accent/10 border border-primary/20 flex items-center justify-center overflow-hidden">
                   {/* Animated neural network visual */}
                   <div className="relative w-64 h-64">
-                    {/* Pulsing rings */}
-                    <div className="absolute inset-0 rounded-full border-2 border-primary/20 animate-ping" style={{ animationDuration: '3s' }} />
-                    <div className="absolute inset-4 rounded-full border-2 border-accent/30 animate-ping" style={{ animationDuration: '2.5s', animationDelay: '0.5s' }} />
-                    <div className="absolute inset-8 rounded-full border border-primary/40 animate-ping" style={{ animationDuration: '2s', animationDelay: '1s' }} />
+                    {/* Pulsing rings — using individual animation properties to avoid shorthand conflict */}
+                    <div
+                      className="absolute inset-0 rounded-full border-2 border-primary/20"
+                      style={{
+                        animationName: 'ping',
+                        animationDuration: '3s',
+                        animationTimingFunction: 'cubic-bezier(0,0,0.2,1)',
+                        animationIterationCount: 'infinite',
+                      }}
+                    />
+                    <div
+                      className="absolute inset-4 rounded-full border-2 border-accent/30"
+                      style={{
+                        animationName: 'ping',
+                        animationDuration: '2.5s',
+                        animationTimingFunction: 'cubic-bezier(0,0,0.2,1)',
+                        animationIterationCount: 'infinite',
+                        animationDelay: '0.5s',
+                      }}
+                    />
+                    <div
+                      className="absolute inset-8 rounded-full border border-primary/40"
+                      style={{
+                        animationName: 'ping',
+                        animationDuration: '2s',
+                        animationTimingFunction: 'cubic-bezier(0,0,0.2,1)',
+                        animationIterationCount: 'infinite',
+                        animationDelay: '1s',
+                      }}
+                    />
                     {/* Center brain */}
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="text-8xl select-none" style={{ filter: 'drop-shadow(0 0 20px #00AEEF88)' }}>
@@ -110,10 +136,29 @@ export default function HomePage() {
                       </div>
                     </div>
                     {/* Floating data points */}
-                    <div className="absolute top-4 right-8 bg-primary/20 backdrop-blur-sm border border-primary/30 rounded-lg px-2 py-1 text-xs text-primary font-mono animate-bounce" style={{ animationDuration: '2s' }}>
+                    <div
+                      className="absolute top-4 right-8 bg-primary/20 backdrop-blur-sm border border-primary/30 rounded-lg px-2 py-1 text-xs text-primary font-mono"
+                      style={{
+                        animationName: 'bounce',
+                        animationDuration: '2s',
+                        animationTimingFunction: 'cubic-bezier(0.8,0,1,1)',
+                        animationIterationCount: 'infinite',
+                        animationDirection: 'alternate',
+                      }}
+                    >
                       Focus: 94%
                     </div>
-                    <div className="absolute bottom-8 left-4 bg-accent/20 backdrop-blur-sm border border-accent/30 rounded-lg px-2 py-1 text-xs text-accent font-mono animate-bounce" style={{ animationDuration: '2.5s', animationDelay: '0.3s' }}>
+                    <div
+                      className="absolute bottom-8 left-4 bg-accent/20 backdrop-blur-sm border border-accent/30 rounded-lg px-2 py-1 text-xs text-accent font-mono"
+                      style={{
+                        animationName: 'bounce',
+                        animationDuration: '2.5s',
+                        animationTimingFunction: 'cubic-bezier(0.8,0,1,1)',
+                        animationIterationCount: 'infinite',
+                        animationDirection: 'alternate',
+                        animationDelay: '0.3s',
+                      }}
+                    >
                       Memory: 87%
                     </div>
                   </div>
