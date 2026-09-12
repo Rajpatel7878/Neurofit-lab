@@ -6,6 +6,7 @@ export interface Product {
   billingPeriod?: 'monthly' | 'one-time';
   features: string[];
   badge?: string;
+  featured?: boolean;
   image: string;
 }
 
@@ -32,6 +33,7 @@ export const products: Product[] = [
     description: 'Access to all premium brain training programs and features',
     price: 19.99,
     billingPeriod: 'monthly',
+    featured: true,
     features: [
       'Unlimited training sessions',
       'AI-powered personalization',
