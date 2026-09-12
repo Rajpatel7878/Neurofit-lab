@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTheme } from 'next-themes';
 import { BrainLogo } from './brain-logo';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,7 +13,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { Menu } from 'lucide-react';
+import { Menu, Sun, Moon, Monitor } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 
 interface HeaderProps {
@@ -24,6 +31,31 @@ const NAV_LINKS = [
   { href: '/vr-demo', label: 'VR Demo' },
   { href: '/dashboard', label: 'Dashboard' },
 ];
+
+function ThemeToggle() {
+  const { setTheme } = useTheme();
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon" className="h-9 w-9" aria-label="Toggle theme">
+          <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => setTheme('light')} className="gap-2">
+          <Sun className="h-4 w-4" /> Light
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('dark')} className="gap-2">
+          <Moon className="h-4 w-4" /> Dark
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('system')} className="gap-2">
+          <Monitor className="h-4 w-4" /> System
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
 export function Header({ variant = 'default' }: HeaderProps) {
   const pathname = usePathname();
@@ -64,8 +96,10 @@ export function Header({ variant = 'default' }: HeaderProps) {
           ))}
         </nav>
 
-        {/* Right side: CTA + mobile menu */}
-        <div className="flex items-center gap-3">
+        {/* Right side */}
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+
           <Button
             asChild
             className="hidden sm:inline-flex bg-primary hover:bg-primary/90 text-primary-foreground"
@@ -73,7 +107,7 @@ export function Header({ variant = 'default' }: HeaderProps) {
             <Link href="/#quiz">Get Your Brain Plan</Link>
           </Button>
 
-          {/* Mobile hamburger menu */}
+          {/* Mobile hamburger */}
           <Sheet>
             <SheetTrigger asChild>
               <Button

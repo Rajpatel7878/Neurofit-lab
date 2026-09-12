@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { Toaster } from 'sonner'
+import { ThemeProvider } from '@/components/theme-provider'
+import { BackToTop } from '@/components/back-to-top'
 import './globals.css'
 
 const geist = Geist({
@@ -39,7 +41,10 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  themeColor: '#00AEEF',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#00AEEF' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
+  ],
   userScalable: true,
 }
 
@@ -49,19 +54,25 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${geist.variable} ${geistMono.variable}`}>
+    <html lang="en" className={`${geist.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <body className="font-sans antialiased">
-        {children}
-        <Toaster
-          position="bottom-right"
-          richColors
-          closeButton
-          toastOptions={{
-            style: {
-              fontFamily: 'var(--font-geist-sans)',
-            },
-          }}
-        />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <BackToTop />
+          <Toaster
+            position="bottom-right"
+            richColors
+            closeButton
+            toastOptions={{
+              style: { fontFamily: 'var(--font-geist-sans)' },
+            }}
+          />
+        </ThemeProvider>
         <Analytics />
       </body>
     </html>
